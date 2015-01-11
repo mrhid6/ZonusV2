@@ -1,0 +1,16 @@
+[
+{
+  "modid": "zonusv2",
+  "name": "Zonus V2",
+  "description": "Zonus Version 2",
+  "version": "1.7.10-1.0",
+  "mcversion": "1.7.10",
+  "url": "",
+  "updateUrl": "",
+  "authors": ["Mrhid6"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["AppliedEnergistics"]
+}
+]
