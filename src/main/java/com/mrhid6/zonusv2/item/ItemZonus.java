@@ -1,10 +1,12 @@
 package com.mrhid6.zonusv2.item;
 
+import com.mrhid6.zonusv2.creativetab.CreativeTabZonus;
 import com.mrhid6.zonusv2.reference.Reference;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -12,6 +14,7 @@ public class ItemZonus extends Item{
 
 	public ItemZonus() {
 		super();
+		this.setCreativeTab(CreativeTabZonus.ZONUS_TAB);
 	}
 	
 	@Override

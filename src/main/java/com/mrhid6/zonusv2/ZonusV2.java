@@ -3,6 +3,7 @@ package com.mrhid6.zonusv2;
 import com.mrhid6.zonusv2.handler.ConfigHandler;
 import com.mrhid6.zonusv2.init.ModBlocks;
 import com.mrhid6.zonusv2.init.ModItems;
+import com.mrhid6.zonusv2.init.Recipes;
 import com.mrhid6.zonusv2.proxy.IProxy;
 import com.mrhid6.zonusv2.reference.Reference;
 import com.mrhid6.zonusv2.utility.LogHelper;
@@ -38,6 +39,8 @@ public class ZonusV2 {
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event){
+		
+		Recipes.init();
 		LogHelper.info("Initialisation Complete!");
 		
 	}

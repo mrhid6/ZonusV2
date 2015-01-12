@@ -1,5 +1,6 @@
 package com.mrhid6.zonusv2.block;
 
+import com.mrhid6.zonusv2.creativetab.CreativeTabZonus;
 import com.mrhid6.zonusv2.reference.Reference;
 
 import cpw.mods.fml.relauncher.Side;
@@ -13,6 +14,7 @@ public class BlockZonus extends Block{
 	
 	public BlockZonus(Material material) {
 		super(material);
+		this.setCreativeTab(CreativeTabZonus.ZONUS_TAB);
 	}
 	
 	
