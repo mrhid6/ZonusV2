@@ -1,20 +1,23 @@
 package com.mrhid6.zonusv2;
 
 import com.mrhid6.zonusv2.handler.ConfigHandler;
+import com.mrhid6.zonusv2.handler.GuiHandler;
 import com.mrhid6.zonusv2.init.ModBlocks;
 import com.mrhid6.zonusv2.init.ModItems;
 import com.mrhid6.zonusv2.init.Recipes;
+import com.mrhid6.zonusv2.init.TileEntities;
+import com.mrhid6.zonusv2.network.PacketHandler;
 import com.mrhid6.zonusv2.proxy.IProxy;
 import com.mrhid6.zonusv2.reference.Reference;
 import com.mrhid6.zonusv2.utility.LogHelper;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, guiFactory = Reference.GUI_FACTOR_CLASS)
 public class ZonusV2 {
@@ -31,6 +34,8 @@ public class ZonusV2 {
 		ConfigHandler.init(event.getSuggestedConfigurationFile());
 		FMLCommonHandler.instance().bus().register(new ConfigHandler());
 		
+		PacketHandler.init();
+		
 		ModItems.init();
 		ModBlocks.init();
 		
@@ -39,6 +44,10 @@ public class ZonusV2 {
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event){
+		
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+		
+		TileEntities.init();
 		
 		Recipes.init();
 		LogHelper.info("Initialisation Complete!");
