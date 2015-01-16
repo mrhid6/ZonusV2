@@ -3,6 +3,7 @@ package com.mrhid6.zonusv2.init;
 import net.minecraft.item.ItemStack;
 
 import com.mrhid6.zonusv2.block.BlockMachine;
+import com.mrhid6.zonusv2.block.BlockTriniumGenerator;
 import com.mrhid6.zonusv2.block.BlockZonus;
 import com.mrhid6.zonusv2.block.BlockZoroFurnace;
 import com.mrhid6.zonusv2.block.cable.BlockCableBase;
@@ -24,6 +25,7 @@ public class ModBlocks {
 	// Machines
 	public static final BlockZonus machineBlock = new BlockMachine();
 	public static final BlockZonus zoroFurnace = new BlockZoroFurnace();
+	public static final BlockZonus trinGenerator = new BlockTriniumGenerator();
 	
 	// Cables
 	public static final BlockCableBase cableBase = new BlockCableBase();
@@ -36,6 +38,7 @@ public class ModBlocks {
 		
 		GameRegistry.registerBlock(machineBlock, "machine");
 		GameRegistry.registerBlock(zoroFurnace, "zorofurnace");
+		GameRegistry.registerBlock(trinGenerator, "tringenerator");
 		
 		
 		GameRegistry.registerBlock(cableBase, "cableBase");

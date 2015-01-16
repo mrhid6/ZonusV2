@@ -17,6 +17,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 public enum BlockLightTextures{
 
 	ZoroFurnaceLights("zorofurnace",3),
+	TriniumGeneratorLights("tringenerator",3),
 	CableBaseLights("cablebase",1),
 	ZoroCableLights("zorocable",1), 
 	ZoroOreLights("multiOre.zoroore",1);

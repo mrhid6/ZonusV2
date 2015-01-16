@@ -5,6 +5,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import com.mrhid6.zonusv2.client.render.RenderZoroFurnace;
 import com.mrhid6.zonusv2.client.renderers.BRCableBase;
+import com.mrhid6.zonusv2.client.renderers.BRTriniumGenerator;
 import com.mrhid6.zonusv2.client.renderers.BRZonusOres;
 import com.mrhid6.zonusv2.client.renderers.BRZoroFurnace;
 import com.mrhid6.zonusv2.client.textures.BlockLightTextures;
@@ -26,11 +27,13 @@ public class ClientProxy extends CommonProxy{
 		RenderIds.ZOROFURNACE = RenderingRegistry.getNextAvailableRenderId();
 		RenderIds.CABLEBASE = RenderingRegistry.getNextAvailableRenderId();
 		RenderIds.ZONUSORES = RenderingRegistry.getNextAvailableRenderId();
+		RenderIds.TRINIUMGENERATOR = RenderingRegistry.getNextAvailableRenderId();
 		
 		
 		RenderingRegistry.registerBlockHandler(RenderIds.ZOROFURNACE, new BRZoroFurnace());
 		RenderingRegistry.registerBlockHandler(RenderIds.CABLEBASE, new BRCableBase());
 		RenderingRegistry.registerBlockHandler(RenderIds.ZONUSORES, new BRZonusOres());
+		RenderingRegistry.registerBlockHandler(RenderIds.TRINIUMGENERATOR, new BRTriniumGenerator());
 		
 		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityZoroFurnace.class, new RenderZoroFurnace());
 	}

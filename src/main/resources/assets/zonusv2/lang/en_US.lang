@@ -7,6 +7,7 @@ item.zonusv2:zorocable.name=Zoro Cable
 # Blocks
 tile.zonusv2:machine.name=Machine Block
 tile.zonusv2:zorofurnace.name=Zoro Furnace
+tile.zonusv2:tringenerator.name=Trinium Generator
 tile.zonusv2:cablebase.name=Cable Base
 tile.zonusv2:zorocable.name=Zoro Cable
 
