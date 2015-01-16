@@ -1,9 +1,17 @@
 # Items
 item.zonusv2:zoroIngot.name=Zoro Ingot
+item.zonusv2:zonusdebug.name=Zonus Debugger
+item.zonusv2:cablebase.name=Cable Base
+item.zonusv2:zorocable.name=Zoro Cable
 
 # Blocks
 tile.zonusv2:machine.name=Machine Block
 tile.zonusv2:zorofurnace.name=Zoro Furnace
+tile.zonusv2:cablebase.name=Cable Base
+tile.zonusv2:zorocable.name=Zoro Cable
+
+#Ores
+tile.zonusv2:multiOre.zoroore.name=Zoro Ore
 
 # Creative Tab
 itemGroup.zonusv2=Zonus
