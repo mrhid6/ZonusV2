@@ -22,12 +22,12 @@ public class BlockZoroFurnace extends BlockMachine implements ITileEntityProvide
 
 	public BlockZoroFurnace() {
 		super();
-		
+
 		this.setHardness(3.5F);
 		this.setResistance(5.5F);
 		this.setBlockName("zorofurnace");
 	}
-	
+
 	@Override
 	public int getRenderType() {
 		return RenderIds.ZOROFURNACE;
@@ -47,18 +47,18 @@ public class BlockZoroFurnace extends BlockMachine implements ITileEntityProvide
 		icons[4] = iconRegister.registerIcon( getTextureName() + "_on_1");
 		icons[5] = iconRegister.registerIcon( getTextureName() + "_on_2");
 	}
-	
-	 @Override
-	    public boolean renderAsNormalBlock()
-	    {
-	        return false;
-	    }
 
-	    @Override
-	    public boolean isOpaqueCube()
-	    {
-	        return false;
-	    }
+	@Override
+	public boolean renderAsNormalBlock()
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube()
+	{
+		return false;
+	}
 
 	@Override
 	public IIcon getIcon(int side, int metaData) {
@@ -79,7 +79,7 @@ public class BlockZoroFurnace extends BlockMachine implements ITileEntityProvide
 		if (tile != null) {
 			tile.dropContent(0, tile);
 		}
-		
+
 		super.breakBlock(world, x, y, z, block, par6);
 	}
 
@@ -93,7 +93,7 @@ public class BlockZoroFurnace extends BlockMachine implements ITileEntityProvide
 			orientation = ((TileEntityZoroFurnace)tileentity).getOrientation().ordinal();
 			state = ((TileEntityZoroFurnace)tileentity).getState();
 		}
-		
+
 		if (blockSide == 1 || blockSide == 0) {
 			return (state==0)?icons[2]:icons[5];
 		}else if(blockSide == orientation){
@@ -102,14 +102,14 @@ public class BlockZoroFurnace extends BlockMachine implements ITileEntityProvide
 			return (state==0)?icons[1]:icons[4];
 		}
 	}
-	
+
 	@Override
-    public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventData)
-    {
-        super.onBlockEventReceived(world, x, y, z, eventId, eventData);
-        TileEntity tileentity = world.getTileEntity(x, y, z);
-        return tileentity != null && tileentity.receiveClientEvent(eventId, eventData);
-    }
+	public boolean onBlockEventReceived(World world, int x, int y, int z, int eventId, int eventData)
+	{
+		super.onBlockEventReceived(world, x, y, z, eventId, eventData);
+		TileEntity tileentity = world.getTileEntity(x, y, z);
+		return tileentity != null && tileentity.receiveClientEvent(eventId, eventData);
+	}
 
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int faceHit, float par7, float par8, float par9)

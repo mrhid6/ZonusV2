@@ -19,9 +19,11 @@ public class Recipes {
 		//TODO
 		//GameRegistry.addSmelting(ModBlocks.ZoriteOre, ModItems.zoroIngot, 0.5f);
 		
+		GameRegistry.addSmelting(new ItemStack(ModBlocks.zonusOres, 1, 0), new ItemStack(ModItems.zoroIngot), 0.5F);
+		
 		GameRegistry.addRecipe(new ItemStack(ModBlocks.machineBlock), "is","si", 's', new ItemStack(Blocks.stone), 'i', new ItemStack(ModItems.zoroIngot));
-		GameRegistry.addRecipe(new ItemStack(ModBlocks.zoroFurnace), "sms","mfm","sms", 
-				's', new ItemStack(Blocks.stone), 'm', new ItemStack(ModBlocks.machineBlock), 'f', new ItemStack(Blocks.furnace));
+		GameRegistry.addRecipe(new ItemStack(ModBlocks.zoroFurnace), "sis","mfm","sms", 
+				's', new ItemStack(Blocks.stone), 'm', new ItemStack(ModBlocks.machineBlock), 'f', new ItemStack(Blocks.furnace), 'i', new ItemStack(ModItems.zoroIngot));
 		
 	}
 	

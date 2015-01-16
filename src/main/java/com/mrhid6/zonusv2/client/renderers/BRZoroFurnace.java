@@ -33,39 +33,7 @@ public class BRZoroFurnace extends BRZonus{
 		
 		if(tileEntityZoroFurnace.getState() == 1){
 			BlockLightTextures light = BlockLightTextures.ZoroFurnaceLights;
-			Tessellator.instance.setColorOpaque_F( 1.0f, 1.0f, 1.0f );
-			Tessellator.instance.setBrightness( 14 << 20 | 14 << 4 );
-			switch(orientation){
-			case SOUTH:
-				renderer.renderFaceZPos(block, x, y, z, light.getIcons()[0]);
-				renderer.renderFaceZNeg(block, x, y, z, light.getIcons()[1]);
-				renderer.renderFaceXNeg(block, x, y, z, light.getIcons()[1]);
-				renderer.renderFaceXPos(block, x, y, z, light.getIcons()[1]);
-				break;
-			case NORTH:
-				renderer.renderFaceZPos(block, x, y, z, light.getIcons()[1]);
-				renderer.renderFaceZNeg(block, x, y, z, light.getIcons()[0]);
-				renderer.renderFaceXNeg(block, x, y, z, light.getIcons()[1]);
-				renderer.renderFaceXPos(block, x, y, z, light.getIcons()[1]);
-				break;
-			case EAST:
-				renderer.renderFaceZPos(block, x, y, z, light.getIcons()[1]);
-				renderer.renderFaceZNeg(block, x, y, z, light.getIcons()[1]);
-				renderer.renderFaceXNeg(block, x, y, z, light.getIcons()[1]);
-				renderer.renderFaceXPos(block, x, y, z, light.getIcons()[0]);
-				break;
-			case WEST:				
-				renderer.renderFaceZPos(block, x, y, z, light.getIcons()[1]);
-				renderer.renderFaceZNeg(block, x, y, z, light.getIcons()[1]);
-				renderer.renderFaceXNeg(block, x, y, z, light.getIcons()[0]);
-				renderer.renderFaceXPos(block, x, y, z, light.getIcons()[1]);
-				break;
-			default:
-				break;
-			}
-			
-			renderer.renderFaceYNeg(block, x, y, z, light.getIcons()[2]);
-			renderer.renderFaceYPos(block, x, y, z, light.getIcons()[2]);
+			render3SidedLights(renderer, block, world, x, y, z, orientation, light);
 		}
 		return true;
 	}

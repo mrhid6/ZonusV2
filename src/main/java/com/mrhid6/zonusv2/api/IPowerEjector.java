@@ -8,8 +8,8 @@ public interface IPowerEjector {
 	
 	public void ejectOnSide(ForgeDirection side, int amount);
 	
-	public void canEjectOnSide(ForgeDirection side);
+	public boolean canEjectOnSide(ForgeDirection side);
 	
-	public int maxEjectAmount();
+	public int getMaxEjectAmount();
 	
 }
