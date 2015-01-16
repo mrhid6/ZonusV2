@@ -1,5 +1,7 @@
 package com.mrhid6.zonusv2.block;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,17 +13,24 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 import com.mrhid6.zonusv2.ZonusV2;
 import com.mrhid6.zonusv2.reference.GUIs;
-import com.mrhid6.zonusv2.tileentity.TileEntityZonus;
+import com.mrhid6.zonusv2.reference.RenderIds;
 import com.mrhid6.zonusv2.tileentity.TileEntityZoroFurnace;
-import com.mrhid6.zonusv2.utility.LogHelper;
 
 public class BlockZoroFurnace extends BlockMachine implements ITileEntityProvider{
 
-	private IIcon[] icons = new IIcon[3];
+	private IIcon[] icons = new IIcon[6];
 
 	public BlockZoroFurnace() {
 		super();
+		
+		this.setHardness(3.5F);
+		this.setResistance(5.5F);
 		this.setBlockName("zorofurnace");
+	}
+	
+	@Override
+	public int getRenderType() {
+		return RenderIds.ZOROFURNACE;
 	}
 
 	@Override
@@ -31,22 +40,47 @@ public class BlockZoroFurnace extends BlockMachine implements ITileEntityProvide
 
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		icons[0] = iconRegister.registerIcon( getTextureName() + "_top");
-		icons[1] = iconRegister.registerIcon( getTextureName() + "_front_on");
-		icons[2] = iconRegister.registerIcon( getTextureName() + "_side_on");
+		icons[0] = iconRegister.registerIcon( getTextureName() + "_off_0");
+		icons[1] = iconRegister.registerIcon( getTextureName() + "_off_1");
+		icons[2] = iconRegister.registerIcon( getTextureName() + "_off_2");
+		icons[3] = iconRegister.registerIcon( getTextureName() + "_on_0");
+		icons[4] = iconRegister.registerIcon( getTextureName() + "_on_1");
+		icons[5] = iconRegister.registerIcon( getTextureName() + "_on_2");
 	}
+	
+	 @Override
+	    public boolean renderAsNormalBlock()
+	    {
+	        return false;
+	    }
+
+	    @Override
+	    public boolean isOpaqueCube()
+	    {
+	        return false;
+	    }
 
 	@Override
 	public IIcon getIcon(int side, int metaData) {
 		if (side == 1) {
-			return icons[0];
-		} else if (side == 0) {
-			return icons[0];
-		} else if (side == 4) {
 			return icons[2];
+		} else if (side == 0) {
+			return icons[2];
+		} else if (side == 4) {
+			return icons[0];
 		} else {
 			return icons[1];
 		}
+	}
+	@Override
+	public void breakBlock(World world, int x, int y,int z, Block block, int par6) {
+		TileEntityZoroFurnace tile = (TileEntityZoroFurnace) world.getTileEntity(x, y, z);
+
+		if (tile != null) {
+			tile.dropContent(0, tile);
+		}
+		
+		super.breakBlock(world, x, y, z, block, par6);
 	}
 
 	@Override
@@ -54,19 +88,18 @@ public class BlockZoroFurnace extends BlockMachine implements ITileEntityProvide
 		TileEntity tileentity = par1IBlockAccess.getTileEntity(x, y, z);
 
 		int orientation = ForgeDirection.SOUTH.ordinal();
-
-		if(tileentity instanceof TileEntityZonus){
-			orientation = ((TileEntityZonus)tileentity).getOrientation().ordinal();
+		short state = 1;
+		if(tileentity instanceof TileEntityZoroFurnace){
+			orientation = ((TileEntityZoroFurnace)tileentity).getOrientation().ordinal();
+			state = ((TileEntityZoroFurnace)tileentity).getState();
 		}
-
-		if (blockSide == 1) {
-			return icons[0];
-		} else if (blockSide == 0) {
-			return icons[0];
-		} else if(blockSide == orientation){
-			return icons[1];
+		
+		if (blockSide == 1 || blockSide == 0) {
+			return (state==0)?icons[2]:icons[5];
+		}else if(blockSide == orientation){
+			return (state==0)?icons[0]:icons[3];
 		} else {
-			return icons[2];
+			return (state==0)?icons[1]:icons[4];
 		}
 	}
 	

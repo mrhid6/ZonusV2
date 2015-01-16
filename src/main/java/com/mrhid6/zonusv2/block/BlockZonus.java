@@ -23,6 +23,9 @@ public class BlockZonus extends Block{
 	
 	public BlockZonus(Material material) {
 		super(material);
+
+		this.setHardness(89.3F);
+		this.setResistance(89.5F);
 		this.setCreativeTab(CreativeTabZonus.ZONUS_TAB);
 	}
 	

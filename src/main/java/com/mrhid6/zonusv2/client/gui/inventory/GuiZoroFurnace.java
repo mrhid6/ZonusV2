@@ -55,7 +55,7 @@ public class GuiZoroFurnace extends GuiZonus{
 	protected void drawTooltips() {
 
 		if (isHovering(42, 144, 61, 71)) {
-			drawToolTip(tileEntityZoroFurnace.getPower() + "z " + "/ " + tileEntityZoroFurnace.getMaxPower() + "z");
+			drawToolTip(tileEntityZoroFurnace.getStoredPower() + "z " + "/ " + tileEntityZoroFurnace.getMaxPower() + "z");
 		}
 
 		/*if (isHovering(10, 26, 16, 32)) {

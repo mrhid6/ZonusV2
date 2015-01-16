@@ -56,7 +56,7 @@ public class ContainerZoroFurnace extends ContainerZonus{
     public void addCraftingToCrafters(ICrafting iCrafting)
     {
         super.addCraftingToCrafters(iCrafting);
-        iCrafting.sendProgressBarUpdate(this, 0, this.tileEntityZoroFurnace.getPower());
+        iCrafting.sendProgressBarUpdate(this, 0, this.tileEntityZoroFurnace.getStoredPower());
         iCrafting.sendProgressBarUpdate(this, 1, this.tileEntityZoroFurnace.getProcessCurrent());
         iCrafting.sendProgressBarUpdate(this, 2, this.tileEntityZoroFurnace.getProcessFinal());
     }
@@ -70,9 +70,9 @@ public class ContainerZoroFurnace extends ContainerZonus{
         {
             ICrafting icrafting = (ICrafting) crafter;
 
-            if (this.lastprocessCurrent != this.tileEntityZoroFurnace.getPower())
+            if (this.lastprocessCurrent != this.tileEntityZoroFurnace.getStoredPower())
             {
-                icrafting.sendProgressBarUpdate(this, 0, this.tileEntityZoroFurnace.getPower());
+                icrafting.sendProgressBarUpdate(this, 0, this.tileEntityZoroFurnace.getStoredPower());
             }
 
             if (this.lastPower != this.tileEntityZoroFurnace.getProcessCurrent())
@@ -86,7 +86,7 @@ public class ContainerZoroFurnace extends ContainerZonus{
             }
         }
 
-        this.lastPower = this.tileEntityZoroFurnace.getPower();
+        this.lastPower = this.tileEntityZoroFurnace.getStoredPower();
         this.lastprocessCurrent = this.tileEntityZoroFurnace.getProcessCurrent();
         this.lastprocessFinal = this.tileEntityZoroFurnace.getProcessFinal();
     }
@@ -96,7 +96,7 @@ public class ContainerZoroFurnace extends ContainerZonus{
 	    {
 	        if (valueType == 0)
 	        {
-	            this.tileEntityZoroFurnace.setPower(updatedValue);
+	            this.tileEntityZoroFurnace.setPowerStored(updatedValue);
 	        }
 
 	        if (valueType == 1)

@@ -1,5 +1,10 @@
 package com.mrhid6.zonusv2.tileentity;
 
+import java.util.Random;
+
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
@@ -8,7 +13,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import com.mrhid6.zonusv2.network.PacketHandler;
 import com.mrhid6.zonusv2.network.message.MessageTileEntityZonus;
 import com.mrhid6.zonusv2.reference.Names;
-import com.mrhid6.zonusv2.utility.LogHelper;
 
 public class TileEntityZonus extends TileEntity
 {
@@ -128,5 +132,35 @@ public class TileEntityZonus extends TileEntity
 	public Packet getDescriptionPacket()
 	{
 		return PacketHandler.INSTANCE.getPacketFrom(new MessageTileEntityZonus(this));
+	}
+	
+	public void dropContent( int newSize, ISidedInventory inventory) {
+
+		Random random = new Random();
+		for (int l = newSize; l < inventory.getSizeInventory(); l++) {
+			ItemStack itemstack = inventory.getStackInSlot(l);
+			if (itemstack == null) {
+				continue;
+			}
+			float f = random.nextFloat() * 0.8F + 0.1F;
+			float f1 = random.nextFloat() * 0.8F + 0.1F;
+			float f2 = random.nextFloat() * 0.8F + 0.1F;
+			while (itemstack.stackSize > 0) {
+				int i1 = random.nextInt(21) + 10;
+				if (i1 > itemstack.stackSize) {
+					i1 = itemstack.stackSize;
+				}
+				itemstack.stackSize -= i1;
+				EntityItem entityitem = new EntityItem(worldObj, xCoord + f, (float) yCoord + (newSize > 0 ? 1 : 0) + f1, zCoord + f2, new ItemStack(itemstack.getItem(), i1, itemstack.getItemDamage()));
+				float f3 = 0.05F;
+				entityitem.motionX = (float) random.nextGaussian() * f3;
+				entityitem.motionY = (float) random.nextGaussian() * f3 + 0.2F;
+				entityitem.motionZ = (float) random.nextGaussian() * f3;
+				if (itemstack.hasTagCompound()) {
+					entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+				}
+				worldObj.spawnEntityInWorld(entityitem);
+			}
+		}
 	}
 }

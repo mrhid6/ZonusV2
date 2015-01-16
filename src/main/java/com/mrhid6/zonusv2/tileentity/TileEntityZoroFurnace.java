@@ -1,6 +1,5 @@
 package com.mrhid6.zonusv2.tileentity;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -9,8 +8,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.mrhid6.zonusv2.api.IMachineSidedConnectable;
+import com.mrhid6.zonusv2.api.IPowerAcceptor;
+import com.mrhid6.zonusv2.api.IPowerObject;
+import com.mrhid6.zonusv2.init.ModBlocks;
 import com.mrhid6.zonusv2.init.Recipes;
-import com.mrhid6.zonusv2.item.ItemZoroIngot;
 import com.mrhid6.zonusv2.network.PacketHandler;
 import com.mrhid6.zonusv2.network.message.MessageTileEntityZoroFurnace;
 import com.mrhid6.zonusv2.reference.Names;
@@ -18,7 +20,7 @@ import com.mrhid6.zonusv2.utility.ItemHelper;
 
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-public class TileEntityZoroFurnace extends TileEntityZonus implements ISidedInventory{
+public class TileEntityZoroFurnace extends TileEntityZonus implements ISidedInventory, IPowerAcceptor, IPowerObject, IMachineSidedConnectable{
 
 	public static final int INVENTORY_SIZE = 2;
 	public static final int INPUT_INVENTORY_INDEX = 0;
@@ -42,17 +44,21 @@ public class TileEntityZoroFurnace extends TileEntityZonus implements ISidedInve
 		processInv = new ItemStack[1];
 	}
 
-	public int getPower() {
+	public int getStoredPower() {
 		return power;
 	}
 
-	public void setPower(int power) {
+	public void setPowerStored(int power) {
 		
-		if(power>getMaxPower()){
+		if(power > getMaxPower()){
 			power = getMaxPower();
 		}
 		
 		this.power = power;
+		
+		if(this.power < 0){
+			this.power = 0;
+		}
 	}
 
 	public int getProcessCurrent() {
@@ -271,7 +277,7 @@ public class TileEntityZoroFurnace extends TileEntityZonus implements ISidedInve
 	private void processStart() {
 		processInv[INPUT_INVENTORY_INDEX] = ItemHelper.cloneItemStack(inventory[INPUT_INVENTORY_INDEX],1);
 
-		processFinal = 50;
+		processFinal = 5;
 
 		inventory[INPUT_INVENTORY_INDEX].stackSize -= 1;
 		if (inventory[INPUT_INVENTORY_INDEX].stackSize <= 0) {
@@ -326,15 +332,31 @@ public class TileEntityZoroFurnace extends TileEntityZonus implements ISidedInve
 		{
 			this.markDirty();
 			this.state = this.isActive ? (byte) 1 : (byte) 0;
-			this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.state);
+			this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, ModBlocks.zoroFurnace, 1, this.state);
 			PacketHandler.INSTANCE.sendToAllAround(new MessageTileEntityZoroFurnace(this), new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, (double) this.xCoord, (double) this.yCoord, (double) this.zCoord, 128d));
 			this.worldObj.notifyBlockChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
 		}
 	}
+	
+	@Override
+    public boolean receiveClientEvent(int eventId, int eventData)
+    {
+        if (eventId == 1)
+        {
+            this.state = (byte) eventData;
+            this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
+            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            return true;
+        }
+        else
+        {
+            return super.receiveClientEvent(eventId, eventData);
+        }
+    }
 
 	public boolean canStart() {
 
-		if (!hasPower() || power<50) {
+		if (!hasPower() || power<processFinal) {
 			return false;
 		}
 
@@ -355,21 +377,42 @@ public class TileEntityZoroFurnace extends TileEntityZonus implements ISidedInve
 		int result = Integer.valueOf(inventory[OUTPUT_INVENTORY_INDEX].stackSize) + Integer.valueOf(output.stackSize);
 		return (result <= output.getMaxStackSize());
 	}
-
-	private boolean hasPower(){
-		return getPower() > 0;
+	
+	@Override
+	public boolean hasPower(){
+		return getStoredPower() > 0;
 	}
 
 	
 	public int getScaledEnergyStored(int scale) {
 		
-		return (getPower() * scale) / getMaxPower();
+		return (getStoredPower() * scale) / getMaxPower();
 	}
 
 	public int getScaledProgress(int scale) {
 		if( getProcessCurrent() == 0 || getProcessFinal() == 0 ) return 0;
 		
 		return ( getProcessCurrent() *scale) / getProcessFinal();
+	}
+
+	@Override
+	public int acceptPowerFromSide(ForgeDirection side, int amount) {
+		
+		int currentPower = getStoredPower();
+		
+		setPowerStored(getStoredPower() + amount);
+		return getStoredPower() - currentPower;
+	}
+
+	@Override
+	public boolean canAcceptPowerFromSide(ForgeDirection side) {
+		return false;
+	}
+
+	@Override
+	public boolean checkConectivityForSide(ForgeDirection side) {
+		if(side == orientation) return false;
+		return true;
 	}
 
 }

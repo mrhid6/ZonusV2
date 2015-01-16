@@ -36,5 +36,5 @@ public class ItemZonus extends Item{
 	public void registerIcons(IIconRegister iconRegister) {
 		itemIcon = iconRegister.registerIcon(this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1));
 	}
-	
+
 }
