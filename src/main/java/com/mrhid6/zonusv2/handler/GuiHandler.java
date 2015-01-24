@@ -13,36 +13,39 @@ import com.mrhid6.zonusv2.tileentity.TileEntityZoroFurnace;
 
 import cpw.mods.fml.common.network.IGuiHandler;
 
-public class GuiHandler implements IGuiHandler
-{
-    @Override
-    public Object getServerGuiElement(int id, EntityPlayer entityPlayer, World world, int x, int y, int z)
-    {
-        if (id == GUIs.ZOROFURNACE.ordinal())
-        {
-        	TileEntityZoroFurnace tileEntityZoroFurnace = (TileEntityZoroFurnace) world.getTileEntity(x, y, z);
-            return new ContainerZoroFurnace(entityPlayer.inventory, tileEntityZoroFurnace);
-        }else if (id == GUIs.TRINIUMGENERATOR.ordinal())
-        {
-        	TileEntityTriniumGenerator tileEntityTrinGen = (TileEntityTriniumGenerator) world.getTileEntity(x, y, z);
-            return new ContainerTriniumGenerator(entityPlayer.inventory, tileEntityTrinGen);
-        }
+public class GuiHandler implements IGuiHandler {
+	@Override
+	public Object getServerGuiElement(int id, EntityPlayer entityPlayer,
+			World world, int x, int y, int z) {
+		if (id == GUIs.ZOROFURNACE.ordinal()) {
+			TileEntityZoroFurnace tileEntityZoroFurnace = (TileEntityZoroFurnace) world
+					.getTileEntity(x, y, z);
+			return new ContainerZoroFurnace(entityPlayer.inventory,
+					tileEntityZoroFurnace);
+		} else if (id == GUIs.TRINIUMGENERATOR.ordinal()) {
+			TileEntityTriniumGenerator tileEntityTrinGen = (TileEntityTriniumGenerator) world
+					.getTileEntity(x, y, z);
+			return new ContainerTriniumGenerator(entityPlayer.inventory,
+					tileEntityTrinGen);
+		}
 
-        return null;
-    }
+		return null;
+	}
 
-    @Override
-    public Object getClientGuiElement(int id, EntityPlayer entityPlayer, World world, int x, int y, int z)
-    {
-        if (id == GUIs.ZOROFURNACE.ordinal())
-        {
-            TileEntityZoroFurnace tileEntityZoroFurnace = (TileEntityZoroFurnace) world.getTileEntity(x, y, z);
-            return new GuiZoroFurnace(entityPlayer.inventory, tileEntityZoroFurnace);
-        }else if (id == GUIs.TRINIUMGENERATOR.ordinal())
-        {
-        	TileEntityTriniumGenerator tileEntityTrinGen = (TileEntityTriniumGenerator) world.getTileEntity(x, y, z);
-            return new GuiTriniumGenerator(entityPlayer.inventory, tileEntityTrinGen);
-        }
-        return null;
-    }
+	@Override
+	public Object getClientGuiElement(int id, EntityPlayer entityPlayer,
+			World world, int x, int y, int z) {
+		if (id == GUIs.ZOROFURNACE.ordinal()) {
+			TileEntityZoroFurnace tileEntityZoroFurnace = (TileEntityZoroFurnace) world
+					.getTileEntity(x, y, z);
+			return new GuiZoroFurnace(entityPlayer.inventory,
+					tileEntityZoroFurnace);
+		} else if (id == GUIs.TRINIUMGENERATOR.ordinal()) {
+			TileEntityTriniumGenerator tileEntityTrinGen = (TileEntityTriniumGenerator) world
+					.getTileEntity(x, y, z);
+			return new GuiTriniumGenerator(entityPlayer.inventory,
+					tileEntityTrinGen);
+		}
+		return null;
+	}
 }

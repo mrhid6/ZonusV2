@@ -18,56 +18,61 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class ItemZonusDebug extends ItemZonus{
-	
-	
+public class ItemZonusDebug extends ItemZonus {
+
 	public ItemZonusDebug() {
 		super();
 		this.setUnlocalizedName("zonusdebug");
 	}
-	
+
 	@Override
-	public ItemStack onItemRightClick(ItemStack itemStack, World world, EntityPlayer player) {
-		
-		if(world.isRemote){
+	public ItemStack onItemRightClick(ItemStack itemStack, World world,
+			EntityPlayer player) {
+
+		if (world.isRemote) {
 			MovingObjectPosition mop = Minecraft.getMinecraft().objectMouseOver;
-			
-			if(mop == null){
-				this.onItemUseFirst(itemStack, player, world, 0, 0, 0, -1, 0, 0, 0);
-			}else{
-				
+
+			if (mop == null) {
+				this.onItemUseFirst(itemStack, player, world, 0, 0, 0, -1, 0,
+						0, 0);
+			} else {
+
 				int x = mop.blockX;
 				int y = mop.blockY;
 				int z = mop.blockZ;
-				
-				if(world.getBlock(x, y, z).isAir(world, x, y, z))
-					this.onItemUseFirst(itemStack, player, world, 0, 0, 0, -1, 0, 0, 0);
-				
+
+				if (world.getBlock(x, y, z).isAir(world, x, y, z))
+					this.onItemUseFirst(itemStack, player, world, 0, 0, 0, -1,
+							0, 0, 0);
+
 			}
 		}
-		
+
 		return itemStack;
 	}
-	
+
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		
-		
-		if(world.isRemote){
+	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player,
+			World world, int x, int y, int z, int side, float hitX, float hitY,
+			float hitZ) {
+
+		if (!world.isRemote) {
 			TileEntity tile = world.getTileEntity(x, y, z);
-			if(tile != null && tile instanceof TileEntityCableBase){
-				
-				TileEntityCableBase cable = (TileEntityCableBase)tile;
-				
-				player.addChatMessage(new ChatComponentText(tile.getClass().getName()));
-				
-				for(int i=0;i<6;i++){
-					player.addChatMessage(new ChatComponentText(ForgeDirection.getOrientation(i)+""+cable.getConnections()[i]));
+			if (tile != null && tile instanceof TileEntityCableBase) {
+
+				TileEntityCableBase cable = (TileEntityCableBase) tile;
+
+				player.addChatMessage(new ChatComponentText(tile.getClass()
+						.getName()));
+
+				for (int i = 0; i < 6; i++) {
+					player.addChatMessage(new ChatComponentText(ForgeDirection.getOrientation(i) + "" + cable.getConnections()[i]));
 				}
+				
+				player.addChatMessage(new ChatComponentText("Power: "+cable.getStoredPowerBuffer()));
 			}
 		}
 		return false;
 	}
-	
-	
+
 }

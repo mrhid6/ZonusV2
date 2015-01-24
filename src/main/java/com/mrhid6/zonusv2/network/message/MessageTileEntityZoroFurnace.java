@@ -14,33 +14,32 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
-public class MessageTileEntityZoroFurnace implements IMessage, IMessageHandler<MessageTileEntityZoroFurnace, IMessage>{
-
+public class MessageTileEntityZoroFurnace implements IMessage,
+		IMessageHandler<MessageTileEntityZoroFurnace, IMessage> {
 
 	public int x, y, z;
 	public byte orientation, state;
 	public String customName, owner;
 	public int power;
 
-	public MessageTileEntityZoroFurnace()
-	{
+	public MessageTileEntityZoroFurnace() {
 	}
 
-	public MessageTileEntityZoroFurnace(TileEntityZoroFurnace tileEntityZoroFurnace)
-	{
+	public MessageTileEntityZoroFurnace(
+			TileEntityZoroFurnace tileEntityZoroFurnace) {
 		this.x = tileEntityZoroFurnace.xCoord;
 		this.y = tileEntityZoroFurnace.yCoord;
 		this.z = tileEntityZoroFurnace.zCoord;
-		this.orientation = (byte) tileEntityZoroFurnace.getOrientation().ordinal();
+		this.orientation = (byte) tileEntityZoroFurnace.getOrientation()
+				.ordinal();
 		this.state = (byte) tileEntityZoroFurnace.getState();
 		this.customName = tileEntityZoroFurnace.getCustomName();
 		this.owner = tileEntityZoroFurnace.getOwner();
-		//this.power = tileEntityZoroFurnace.getPower();
+		// this.power = tileEntityZoroFurnace.getPower();
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf)
-	{
+	public void fromBytes(ByteBuf buf) {
 		this.x = buf.readInt();
 		this.y = buf.readInt();
 		this.z = buf.readInt();
@@ -50,13 +49,12 @@ public class MessageTileEntityZoroFurnace implements IMessage, IMessageHandler<M
 		this.customName = new String(buf.readBytes(customNameLength).array());
 		int ownerLength = buf.readInt();
 		this.owner = new String(buf.readBytes(ownerLength).array());
-		//this.power = buf.readInt();
+		// this.power = buf.readInt();
 		LogHelper.info(toString());
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf)
-	{
+	public void toBytes(ByteBuf buf) {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
@@ -66,29 +64,32 @@ public class MessageTileEntityZoroFurnace implements IMessage, IMessageHandler<M
 		buf.writeBytes(customName.getBytes());
 		buf.writeInt(owner.length());
 		buf.writeBytes(owner.getBytes());
-		//buf.writeInt(power);
+		// buf.writeInt(power);
 	}
 
 	@Override
-	public IMessage onMessage(MessageTileEntityZoroFurnace message, MessageContext ctx)
-	{
-		TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld.getTileEntity(message.x, message.y, message.z);
+	public IMessage onMessage(MessageTileEntityZoroFurnace message,
+			MessageContext ctx) {
+		TileEntity tileEntity = FMLClientHandler.instance().getClient().theWorld
+				.getTileEntity(message.x, message.y, message.z);
 
-		if (tileEntity instanceof TileEntityZoroFurnace)
-		{
-			((TileEntityZoroFurnace) tileEntity).setOrientation(message.orientation);
+		if (tileEntity instanceof TileEntityZoroFurnace) {
+			((TileEntityZoroFurnace) tileEntity)
+					.setOrientation(message.orientation);
 			((TileEntityZoroFurnace) tileEntity).setState(message.state);
-			((TileEntityZoroFurnace) tileEntity).setCustomName(message.customName);
+			((TileEntityZoroFurnace) tileEntity)
+					.setCustomName(message.customName);
 			((TileEntityZoroFurnace) tileEntity).setOwner(message.owner);
-			//((TileEntityZoroFurnace) tileEntity).setPower(message.power);
+			// ((TileEntityZoroFurnace) tileEntity).setPower(message.power);
 		}
 
 		return null;
 	}
 
 	@Override
-	public String toString()
-	{
-		return String.format("MessageTileEntityZoroFurnace - x:%s, y:%s, z:%s, orientation:%s, state:%s, customName:%s, owner:%s, power:%s", x, y, z, orientation, state, customName, owner, power);
+	public String toString() {
+		return String
+				.format("MessageTileEntityZoroFurnace - x:%s, y:%s, z:%s, orientation:%s, state:%s, customName:%s, owner:%s, power:%s",
+						x, y, z, orientation, state, customName, owner, power);
 	}
 }

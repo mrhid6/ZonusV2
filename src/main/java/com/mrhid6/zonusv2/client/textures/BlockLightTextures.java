@@ -14,52 +14,50 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public enum BlockLightTextures{
+public enum BlockLightTextures {
 
-	ZoroFurnaceLights("zorofurnace",3),
-	TriniumGeneratorLights("tringenerator",3),
-	CableBaseLights("cablebase",1),
-	ZoroCableLights("zorocable",1), 
-	ZoroOreLights("multiOre.zoroore",1);
+	ZoroFurnaceLights("zorofurnace", 3), TriniumGeneratorLights(
+			"tringenerator", 3), CableBaseLights("cablebase", 1), ZoroCableLights(
+			"zorocable", 1), ZoroOreLights("multiOre.zoroore", 1);
 
 	final private String name;
 	public IIcon[] icons;
 
-	public ResourceLocation GuiTexture()
-	{
-		return new ResourceLocation( Reference.MOD_ID, "textures/blocks/" + this.name() );
+	public ResourceLocation GuiTexture() {
+		return new ResourceLocation(Reference.MOD_ID, "textures/blocks/"
+				+ this.name());
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		return this.name;
 	}
 
-	private BlockLightTextures(String name,int iconcount) {
+	private BlockLightTextures(String name, int iconcount) {
 		this.name = name + "_lights";
 		this.icons = new IIcon[iconcount];
 	}
 
-	public IIcon[] getIcons()
-	{
+	public IIcon[] getIcons() {
 		return this.icons;
 	}
 
-	public void registerIcon(TextureMap map)
-	{
-		if(icons.length == 1){
-			this.icons[0] = map.registerIcon( Reference.MOD_ID+":" + this.name);
-		}else{
-			for(int i=0;i<icons.length;i++){
-				this.icons[i] = map.registerIcon( Reference.MOD_ID+":" + this.name + "_"+i );
+	public void registerIcon(TextureMap map) {
+		if (icons.length == 1) {
+			this.icons[0] = map
+					.registerIcon(Reference.MOD_ID + ":" + this.name);
+		} else {
+			for (int i = 0; i < icons.length; i++) {
+				this.icons[i] = map.registerIcon(Reference.MOD_ID + ":"
+						+ this.name + "_" + i);
 			}
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static IIcon getMissing()
-	{
-		return ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture( TextureMap.locationBlocksTexture )).getAtlasSprite( "missingno" );
+	public static IIcon getMissing() {
+		return ((TextureMap) Minecraft.getMinecraft().getTextureManager()
+				.getTexture(TextureMap.locationBlocksTexture))
+				.getAtlasSprite("missingno");
 	}
 
 }

@@ -7,8 +7,9 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
 public class CreativeTabZonus {
-	public static final CreativeTabs ZONUS_TAB = new CreativeTabs(Reference.MOD_ID.toLowerCase()) {
-		
+	public static final CreativeTabs ZONUS_TAB = new CreativeTabs(
+			Reference.MOD_ID.toLowerCase()) {
+
 		@Override
 		public Item getTabIconItem() {
 			return ModItems.zoroIngot;

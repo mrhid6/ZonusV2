@@ -8,20 +8,23 @@ import net.minecraft.item.ItemStack;
 
 public class ItemBlockZonusOre extends ItemBlock {
 
-	private final static String[] subNames = { "zoroore", "Trinium Ore", "Noxite Ore", "Stearillium Ore", "yellow", "lightGreen", "pink", "darkGrey", "lightGrey", "cyan", "purple", "blue", "brown", "green", "red", "black" };
+	private final static String[] subNames = { "zoroore", "Trinium Ore",
+			"Noxite Ore", "Stearillium Ore", "yellow", "lightGreen", "pink",
+			"darkGrey", "lightGrey", "cyan", "purple", "blue", "brown",
+			"green", "red", "black" };
 
 	public ItemBlockZonusOre(Block b) {
 		super(b);
 		setHasSubtypes(true);
 	}
-	
+
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
-		return getUnlocalizedName()+"."+subNames[itemStack.getItemDamage()];
+		return getUnlocalizedName() + "." + subNames[itemStack.getItemDamage()];
 	}
 
 	@Override
-	public int getMetadata( int damageValue ) {
+	public int getMetadata(int damageValue) {
 		return damageValue;
 	}
 

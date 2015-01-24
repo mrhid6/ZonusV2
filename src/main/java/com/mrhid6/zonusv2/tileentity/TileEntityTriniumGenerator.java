@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import com.mrhid6.zonusv2.api.ICablePowerObject;
 import com.mrhid6.zonusv2.api.IMachineSidedConnectable;
 import com.mrhid6.zonusv2.api.IPowerAcceptor;
 import com.mrhid6.zonusv2.api.IPowerEjector;
@@ -22,7 +23,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class TileEntityTriniumGenerator extends TileEntityZonus implements ISidedInventory, IPowerObject, IPowerEjector, IMachineSidedConnectable{
+public class TileEntityTriniumGenerator extends TileEntityZonus implements
+		ISidedInventory, IPowerObject, IPowerEjector, IMachineSidedConnectable {
 
 	private int ejectAmount = 80;
 	private int power = 5000;
@@ -44,99 +46,102 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 	@Override
 	public void updateEntity() {
 
-		if(!this.worldObj.isRemote){
+		if (!this.worldObj.isRemote) {
 
 			boolean isBurning = this.deviceCookTime > 0;
 			boolean sendUpdate = false;
 
-			if (this.deviceCookTime > 0)
-			{
+			if (this.deviceCookTime > 0) {
 				this.deviceCookTime--;
 			}
 
-			if(deviceCookTime == 0){
-				this.totalFuelTime = this.deviceCookTime = TileEntityFurnace.getItemBurnTime(this.inventory[INPUT_INVENTORY_INDEX]);
+			if (deviceCookTime == 0) {
+				this.totalFuelTime = this.deviceCookTime = TileEntityFurnace
+						.getItemBurnTime(this.inventory[INPUT_INVENTORY_INDEX]);
 
-				if (this.deviceCookTime > 0)
-				{
+				if (this.deviceCookTime > 0) {
 					sendUpdate = true;
 
-					if (this.inventory[INPUT_INVENTORY_INDEX] != null)
-					{
+					if (this.inventory[INPUT_INVENTORY_INDEX] != null) {
 						--this.inventory[INPUT_INVENTORY_INDEX].stackSize;
 
-						if (this.inventory[INPUT_INVENTORY_INDEX].stackSize == 0)
-						{
-							this.inventory[INPUT_INVENTORY_INDEX] = this.inventory[INPUT_INVENTORY_INDEX].getItem().getContainerItem(inventory[INPUT_INVENTORY_INDEX]);
+						if (this.inventory[INPUT_INVENTORY_INDEX].stackSize == 0) {
+							this.inventory[INPUT_INVENTORY_INDEX] = this.inventory[INPUT_INVENTORY_INDEX]
+									.getItem().getContainerItem(
+											inventory[INPUT_INVENTORY_INDEX]);
 						}
 					}
 				}
 			}
 
-			if(this.deviceCookTime > 0){
+			if (this.deviceCookTime > 0) {
 				setPowerStored(getStoredPower() + 10);
 			}
 
-			if (isBurning != this.deviceCookTime > 0)
-			{
+			if (isBurning != this.deviceCookTime > 0) {
 				sendUpdate = true;
 			}
 
 			sendPacket(sendUpdate);
 
-
 			ejectPower();
 		}
 	}
-	
-	public void sendPacket(boolean sendUpdate){
-		if (sendUpdate)
-		{
+
+	public void sendPacket(boolean sendUpdate) {
+		if (sendUpdate) {
 			this.markDirty();
 			this.state = this.deviceCookTime > 0 ? (byte) 1 : (byte) 0;
-			this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, ModBlocks.trinGenerator, 1, this.state);
-			PacketHandler.INSTANCE.sendToAllAround(new MessageTileEntityTriniumGenerator(this), new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, (double) this.xCoord, (double) this.yCoord, (double) this.zCoord, 128d));
-			this.worldObj.notifyBlockChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
+			this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord,
+					ModBlocks.trinGenerator, 1, this.state);
+			PacketHandler.INSTANCE.sendToAllAround(
+					new MessageTileEntityTriniumGenerator(this),
+					new NetworkRegistry.TargetPoint(
+							this.worldObj.provider.dimensionId,
+							(double) this.xCoord, (double) this.yCoord,
+							(double) this.zCoord, 128d));
+			this.worldObj.notifyBlockChange(this.xCoord, this.yCoord,
+					this.zCoord, this.getBlockType());
 		}
 	}
 
 	@Override
 	public void ejectPower() {
 		int currentPower = getStoredPower();
-		
-		if(hasPower()){
+
+		if (hasPower()) {
 			int outputCount = 0;
-			for(int i =0;i<6;i++){
+			for (int i = 0; i < 6; i++) {
 				ForgeDirection side = ForgeDirection.getOrientation(i);
-				if(canEjectOnSide(side)){
+				if (canEjectOnSide(side)) {
 					outputCount++;
 				}
 			}
 
-			if(outputCount == 0){
+			if (outputCount == 0) {
 				return;
 			}
 
-			for(int i =0;i<6;i++){
+			for (int i = 0; i < 6; i++) {
 				ForgeDirection side = ForgeDirection.getOrientation(i);
-				if(canEjectOnSide(side)){
+				if (canEjectOnSide(side)) {
 
 					int outputAmount = 0;
 
-					if(getStoredPower() < getMaxEjectAmount()){
-						outputAmount = (int)Math.ceil((float)getStoredPower() / (float)outputCount); 
-					}else{
+					if (getStoredPower() < getMaxEjectAmount()) {
+						outputAmount = (int) Math.ceil((float) getStoredPower()
+								/ (float) outputCount);
+					} else {
 						outputAmount = getMaxEjectAmount() / outputCount;
 					}
 
-					if(hasPower()){
+					if (hasPower()) {
 						ejectOnSide(side, outputAmount);
 					}
 				}
 			}
 		}
 	}
-
 
 	@Override
 	public void ejectOnSide(ForgeDirection side, int amount) {
@@ -146,15 +151,26 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 
 		TileEntity tile = this.worldObj.getTileEntity(x, y, z);
 
-		if(tile instanceof IPowerAcceptor){
+		if (tile instanceof IPowerAcceptor) {
 
-			if(amount > getStoredPower()){
+			if (amount > getStoredPower()) {
 				amount = getStoredPower();
 			}
 
-			IPowerAcceptor acceptor = (IPowerAcceptor)tile;
+			IPowerAcceptor acceptor = (IPowerAcceptor) tile;
 
 			int taken = acceptor.acceptPowerFromSide(side.getOpposite(), amount);
+			
+			setPowerStored(getStoredPower() - taken);
+		}else if(tile instanceof ICablePowerObject){
+			
+			if (amount > getStoredPower()) {
+				amount = getStoredPower();
+			}
+			
+			ICablePowerObject cable = (ICablePowerObject) tile;
+			int taken = cable.getAmountICanAccept(amount);
+			cable.transferPower(taken);
 			setPowerStored(getStoredPower() - taken);
 		}
 	}
@@ -168,10 +184,14 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 
 		TileEntity tile = this.worldObj.getTileEntity(x, y, z);
 
-		if(tile instanceof IPowerAcceptor){
-			IPowerAcceptor acceptor = (IPowerAcceptor)tile;
+		if (tile instanceof IPowerAcceptor) {
+			IPowerAcceptor acceptor = (IPowerAcceptor) tile;
 
 			return acceptor.canAcceptPowerFromSide(side.getOpposite());
+		}
+		
+		if (tile instanceof ICablePowerObject) {
+			return true;
 		}
 
 		return false;
@@ -184,13 +204,13 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 
 	@Override
 	public void setPowerStored(int power) {
-		if(power > getMaxPower()){
+		if (power > getMaxPower()) {
 			power = getMaxPower();
 		}
 
 		this.power = power;
 
-		if(this.power < 0){
+		if (this.power < 0) {
 			this.power = 0;
 		}
 	}
@@ -216,36 +236,30 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 	}
 
 	@Override
-	public boolean receiveClientEvent(int eventId, int eventData)
-	{
-		if (eventId == 1)
-		{
+	public boolean receiveClientEvent(int eventId, int eventData) {
+		if (eventId == 1) {
 			this.state = (byte) eventData;
 			this.worldObj.func_147451_t(this.xCoord, this.yCoord, this.zCoord);
 			worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 			return true;
-		}
-		else
-		{
+		} else {
 			return super.receiveClientEvent(eventId, eventData);
 		}
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbtTagCompound)
-	{
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
 
 		// Read in the ItemStacks in the inventory from NBT
 		NBTTagList tagList = nbtTagCompound.getTagList(Names.NBT.ITEMS, 10);
 		inventory = new ItemStack[this.getSizeInventory()];
-		for (int i = 0; i < tagList.tagCount(); ++i)
-		{
+		for (int i = 0; i < tagList.tagCount(); ++i) {
 			NBTTagCompound tagCompound = tagList.getCompoundTagAt(i);
 			byte slotIndex = tagCompound.getByte("Slot");
-			if (slotIndex >= 0 && slotIndex < inventory.length)
-			{
-				inventory[slotIndex] = ItemStack.loadItemStackFromNBT(tagCompound);
+			if (slotIndex >= 0 && slotIndex < inventory.length) {
+				inventory[slotIndex] = ItemStack
+						.loadItemStackFromNBT(tagCompound);
 			}
 		}
 
@@ -253,18 +267,15 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 		power = nbtTagCompound.getInteger("power");
 		totalFuelTime = nbtTagCompound.getInteger("totalFuelTime");
 	}
-	
+
 	@Override
-	public void writeToNBT(NBTTagCompound nbtTagCompound)
-	{
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
 
 		// Write the ItemStacks in the inventory to NBT
 		NBTTagList tagList = new NBTTagList();
-		for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex)
-		{
-			if (inventory[currentIndex] != null)
-			{
+		for (int currentIndex = 0; currentIndex < inventory.length; ++currentIndex) {
+			if (inventory[currentIndex] != null) {
 				NBTTagCompound tagCompound = new NBTTagCompound();
 				tagCompound.setByte("Slot", (byte) currentIndex);
 				inventory[currentIndex].writeToNBT(tagCompound);
@@ -290,17 +301,12 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 	@Override
 	public ItemStack decrStackSize(int slotIndex, int decrementAmount) {
 		ItemStack itemStack = getStackInSlot(slotIndex);
-		if (itemStack != null)
-		{
-			if (itemStack.stackSize <= decrementAmount)
-			{
+		if (itemStack != null) {
+			if (itemStack.stackSize <= decrementAmount) {
 				setInventorySlotContents(slotIndex, null);
-			}
-			else
-			{
+			} else {
 				itemStack = itemStack.splitStack(decrementAmount);
-				if (itemStack.stackSize == 0)
-				{
+				if (itemStack.stackSize == 0) {
 					setInventorySlotContents(slotIndex, null);
 				}
 			}
@@ -312,8 +318,7 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 	@Override
 	public ItemStack getStackInSlotOnClosing(int slotIndex) {
 		ItemStack itemStack = getStackInSlot(slotIndex);
-		if (itemStack != null)
-		{
+		if (itemStack != null) {
 			setInventorySlotContents(slotIndex, null);
 		}
 		return itemStack;
@@ -321,7 +326,8 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 
 	@Override
 	public String getInventoryName() {
-		return this.hasCustomName() ? this.getCustomName() : Names.Containers.ZOROFURNACE;
+		return this.hasCustomName() ? this.getCustomName()
+				: Names.Containers.ZOROFURNACE;
 	}
 
 	@Override
@@ -342,28 +348,26 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 	@Override
 	public void setInventorySlotContents(int slotIndex, ItemStack itemStack) {
 		inventory[slotIndex] = itemStack;
-		if (itemStack != null && itemStack.stackSize > getInventoryStackLimit())
-		{
+		if (itemStack != null && itemStack.stackSize > getInventoryStackLimit()) {
 			itemStack.stackSize = getInventoryStackLimit();
 		}
 	}
 
 	@Override
-	public void openInventory() {}
+	public void openInventory() {
+	}
 
 	@Override
-	public void closeInventory() {}
+	public void closeInventory() {
+	}
 
 	@Override
 	public boolean isItemValidForSlot(int slotIndex, ItemStack itemStack) {
-		switch (slotIndex)
-		{
-		case INPUT_INVENTORY_INDEX:
-		{
+		switch (slotIndex) {
+		case INPUT_INVENTORY_INDEX: {
 			return true;
 		}
-		default:
-		{
+		default: {
 			return false;
 		}
 		}
@@ -371,7 +375,7 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int side) {
-		return new int[]{INPUT_INVENTORY_INDEX, INPUT_INVENTORY_INDEX+1};
+		return new int[] { INPUT_INVENTORY_INDEX, INPUT_INVENTORY_INDEX + 1 };
 	}
 
 	@Override
@@ -380,7 +384,8 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 	}
 
 	@Override
-	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, int p_102008_3_) {
+	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_,
+			int p_102008_3_) {
 		return false;
 	}
 
@@ -399,20 +404,18 @@ public class TileEntityTriniumGenerator extends TileEntityZonus implements ISide
 	public void setDeviceCookTime(int deviceCookTime) {
 		this.deviceCookTime = deviceCookTime;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public int getScaledEnergyStored(int scale) {
 
 		return (getStoredPower() * scale) / getMaxPower();
 	}
-	
+
 	@SideOnly(Side.CLIENT)
-    public int getBurnTimeRemainingScaled(int scale)
-    {
-        if (this.totalFuelTime > 0)
-        {
-            return this.deviceCookTime * scale / this.totalFuelTime;
-        }
-        return 0;
-    }
+	public int getBurnTimeRemainingScaled(int scale) {
+		if (this.totalFuelTime > 0) {
+			return this.deviceCookTime * scale / this.totalFuelTime;
+		}
+		return 0;
+	}
 }

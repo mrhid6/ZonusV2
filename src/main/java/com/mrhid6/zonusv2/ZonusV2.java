@@ -1,8 +1,5 @@
 package com.mrhid6.zonusv2;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
-
 import com.mrhid6.zonusv2.handler.ConfigHandler;
 import com.mrhid6.zonusv2.handler.GuiHandler;
 import com.mrhid6.zonusv2.init.ModBlocks;
@@ -32,42 +29,42 @@ public class ZonusV2 {
 
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	public static IProxy proxy;
-	
+
 	@Mod.EventHandler
-	public void preInit(FMLPreInitializationEvent event){
-		
+	public void preInit(FMLPreInitializationEvent event) {
+
 		ConfigHandler.init(event.getSuggestedConfigurationFile());
 		FMLCommonHandler.instance().bus().register(new ConfigHandler());
-		
+
 		proxy.init();
 
 		PacketHandler.init();
-		
+
 		ModItems.init();
 		ModBlocks.init();
-		
+
 		LogHelper.info("Pre Initialisation Complete!");
 	}
-	
+
 	@Mod.EventHandler
-	public void init(FMLInitializationEvent event){
-		
+	public void init(FMLInitializationEvent event) {
+
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
-		
+
 		TileEntities.init();
-		
+
 		proxy.initRenderingAndTextures();
-		
+
 		Recipes.init();
-		
+
 		GameRegistry.registerWorldGenerator(new WorldGenBase(), 1);
 		LogHelper.info("Initialisation Complete!");
-		
+
 	}
-	
+
 	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event){
+	public void postInit(FMLPostInitializationEvent event) {
 		LogHelper.info("Post Initialisation Complete!");
 	}
-	
+
 }

@@ -11,21 +11,25 @@ import com.mrhid6.zonusv2.inventory.ContainerZoroFurnace;
 import com.mrhid6.zonusv2.reference.Reference;
 import com.mrhid6.zonusv2.tileentity.TileEntityZoroFurnace;
 
-public class GuiZoroFurnace extends GuiZonus{
+public class GuiZoroFurnace extends GuiZonus {
 
 	private TileEntityZoroFurnace tileEntityZoroFurnace;
 
-	public GuiZoroFurnace(InventoryPlayer inventoryPlayer, TileEntityZoroFurnace tileEntityZoroFurnace) {
+	public GuiZoroFurnace(InventoryPlayer inventoryPlayer,
+			TileEntityZoroFurnace tileEntityZoroFurnace) {
 		super(new ContainerZoroFurnace(inventoryPlayer, tileEntityZoroFurnace));
 		this.tileEntityZoroFurnace = tileEntityZoroFurnace;
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
+	protected void drawGuiContainerBackgroundLayer(float p_146976_1_,
+			int p_146976_2_, int p_146976_3_) {
 		// draw your Gui here, only thing you need to change is the path
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-		mc.getTextureManager().bindTexture(new ResourceLocation(Reference.MOD_ID,"textures/gui/zorofurnace.png"));
+		mc.getTextureManager().bindTexture(
+				new ResourceLocation(Reference.MOD_ID,
+						"textures/gui/zorofurnace.png"));
 		int x = (width - xSize) / 2;
 		int y = (height - ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
@@ -45,25 +49,28 @@ public class GuiZoroFurnace extends GuiZonus{
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer( int param1, int param2 ) {
+	protected void drawGuiContainerForegroundLayer(int param1, int param2) {
 		fontRendererObj.drawString("Zoro Furnace", 50, 6, 4210752);
-		fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, ySize - 96 + 2, 4210752);
+		fontRendererObj.drawString(
+				StatCollector.translateToLocal("container.inventory"), 8,
+				ySize - 96 + 2, 4210752);
 		super.drawGuiContainerForegroundLayer(param1, param2);
 	}
-	
+
 	@Override
 	protected void drawTooltips() {
 
 		if (isHovering(42, 144, 61, 71)) {
-			drawToolTip(tileEntityZoroFurnace.getStoredPower() + "z " + "/ " + tileEntityZoroFurnace.getMaxPower() + "z");
+			drawToolTip(tileEntityZoroFurnace.getStoredPower() + "z " + "/ "
+					+ tileEntityZoroFurnace.getMaxPower() + "z");
 		}
 
-		/*if (isHovering(10, 26, 16, 32)) {
-			drawToolTip(container.tileEntity.getModeText());
-
-		} else if (isHovering(10, 26, 34, 50)) {
-			drawToolTip(container.tileEntity.getColourText());
-		}*/
+		/*
+		 * if (isHovering(10, 26, 16, 32)) {
+		 * drawToolTip(container.tileEntity.getModeText()); } else if
+		 * (isHovering(10, 26, 34, 50)) {
+		 * drawToolTip(container.tileEntity.getColourText()); }
+		 */
 
 	}
 

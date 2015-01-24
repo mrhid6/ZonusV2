@@ -14,127 +14,108 @@ import com.mrhid6.zonusv2.network.PacketHandler;
 import com.mrhid6.zonusv2.network.message.MessageTileEntityZonus;
 import com.mrhid6.zonusv2.reference.Names;
 
-public class TileEntityZonus extends TileEntity
-{
+public class TileEntityZonus extends TileEntity {
 	protected ForgeDirection orientation;
 	protected byte state;
 	protected String customName;
 	protected String owner;
 
-	public TileEntityZonus()
-	{
+	public TileEntityZonus() {
 		orientation = ForgeDirection.SOUTH;
 		state = 0;
 		customName = "";
 		owner = "";
 	}
 
-	public ForgeDirection getOrientation()
-	{
+	public ForgeDirection getOrientation() {
 		return orientation;
 	}
 
-	public void setOrientation(ForgeDirection orientation)
-	{
+	public void setOrientation(ForgeDirection orientation) {
 		this.orientation = orientation;
 	}
 
-	public void setOrientation(int orientation)
-	{
+	public void setOrientation(int orientation) {
 		this.orientation = ForgeDirection.getOrientation(orientation);
 	}
 
-	public short getState()
-	{
+	public short getState() {
 		return state;
 	}
 
-	public void setState(byte state)
-	{
+	public void setState(byte state) {
 		this.state = state;
 	}
 
-	public String getCustomName()
-	{
+	public String getCustomName() {
 		return customName;
 	}
 
-	public void setCustomName(String customName)
-	{
+	public void setCustomName(String customName) {
 		this.customName = customName;
 	}
 
-	public String getOwner()
-	{
+	public String getOwner() {
 		return owner;
 	}
 
-	public void setOwner(String owner)
-	{
+	public void setOwner(String owner) {
 		this.owner = owner;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbtTagCompound)
-	{
+	public void readFromNBT(NBTTagCompound nbtTagCompound) {
 		super.readFromNBT(nbtTagCompound);
 
-		if (nbtTagCompound.hasKey(Names.NBT.DIRECTION))
-		{
-			this.orientation = ForgeDirection.getOrientation(nbtTagCompound.getByte(Names.NBT.DIRECTION));
+		if (nbtTagCompound.hasKey(Names.NBT.DIRECTION)) {
+			this.orientation = ForgeDirection.getOrientation(nbtTagCompound
+					.getByte(Names.NBT.DIRECTION));
 		}
 
-		if (nbtTagCompound.hasKey(Names.NBT.STATE))
-		{
+		if (nbtTagCompound.hasKey(Names.NBT.STATE)) {
 			this.state = nbtTagCompound.getByte(Names.NBT.STATE);
 		}
 
-		if (nbtTagCompound.hasKey(Names.NBT.CUSTOM_NAME))
-		{
+		if (nbtTagCompound.hasKey(Names.NBT.CUSTOM_NAME)) {
 			this.customName = nbtTagCompound.getString(Names.NBT.CUSTOM_NAME);
 		}
 
-		if (nbtTagCompound.hasKey(Names.NBT.OWNER))
-		{
+		if (nbtTagCompound.hasKey(Names.NBT.OWNER)) {
 			this.owner = nbtTagCompound.getString(Names.NBT.OWNER);
 		}
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbtTagCompound)
-	{
+	public void writeToNBT(NBTTagCompound nbtTagCompound) {
 		super.writeToNBT(nbtTagCompound);
-		nbtTagCompound.setByte(Names.NBT.DIRECTION, (byte) orientation.ordinal());
+		nbtTagCompound.setByte(Names.NBT.DIRECTION,
+				(byte) orientation.ordinal());
 		nbtTagCompound.setByte(Names.NBT.STATE, state);
 
-		if (this.hasCustomName())
-		{
+		if (this.hasCustomName()) {
 			nbtTagCompound.setString(Names.NBT.CUSTOM_NAME, customName);
 		}
 
-		if (this.hasOwner())
-		{
+		if (this.hasOwner()) {
 			nbtTagCompound.setString(Names.NBT.OWNER, owner);
 		}
 	}
 
-	public boolean hasCustomName()
-	{
+	public boolean hasCustomName() {
 		return customName != null && customName.length() > 0;
 	}
 
-	public boolean hasOwner()
-	{
+	public boolean hasOwner() {
 		return owner != null && owner.length() > 0;
 	}
 
 	@Override
-	public Packet getDescriptionPacket()
-	{
-		return PacketHandler.INSTANCE.getPacketFrom(new MessageTileEntityZonus(this));
+	public Packet getDescriptionPacket() {
+		return PacketHandler.INSTANCE.getPacketFrom(new MessageTileEntityZonus(
+				this));
 	}
-	
-	public void dropContent( int newSize, ISidedInventory inventory) {
+
+	public void dropContent(int newSize, ISidedInventory inventory) {
 
 		Random random = new Random();
 		for (int l = newSize; l < inventory.getSizeInventory(); l++) {
@@ -151,13 +132,17 @@ public class TileEntityZonus extends TileEntity
 					i1 = itemstack.stackSize;
 				}
 				itemstack.stackSize -= i1;
-				EntityItem entityitem = new EntityItem(worldObj, xCoord + f, (float) yCoord + (newSize > 0 ? 1 : 0) + f1, zCoord + f2, new ItemStack(itemstack.getItem(), i1, itemstack.getItemDamage()));
+				EntityItem entityitem = new EntityItem(worldObj, xCoord + f,
+						(float) yCoord + (newSize > 0 ? 1 : 0) + f1, zCoord
+								+ f2, new ItemStack(itemstack.getItem(), i1,
+								itemstack.getItemDamage()));
 				float f3 = 0.05F;
 				entityitem.motionX = (float) random.nextGaussian() * f3;
 				entityitem.motionY = (float) random.nextGaussian() * f3 + 0.2F;
 				entityitem.motionZ = (float) random.nextGaussian() * f3;
 				if (itemstack.hasTagCompound()) {
-					entityitem.getEntityItem().setTagCompound((NBTTagCompound) itemstack.getTagCompound().copy());
+					entityitem.getEntityItem().setTagCompound(
+							(NBTTagCompound) itemstack.getTagCompound().copy());
 				}
 				worldObj.spawnEntityInWorld(entityitem);
 			}

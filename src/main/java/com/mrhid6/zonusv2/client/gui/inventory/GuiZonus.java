@@ -6,17 +6,17 @@ import net.minecraft.inventory.Container;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
-public abstract class GuiZonus extends GuiContainer{
-	
+public abstract class GuiZonus extends GuiContainer {
+
 	protected int mousex;
 	protected int mousey;
-	
+
 	public GuiZonus(Container container) {
 		super(container);
 	}
-	
+
 	@Override
-	protected void drawGuiContainerForegroundLayer( int par1, int par2 ) {
+	protected void drawGuiContainerForegroundLayer(int par1, int par2) {
 
 		GL11.glDisable(2896);
 		GL11.glDisable(2929);
@@ -26,13 +26,13 @@ public abstract class GuiZonus extends GuiContainer{
 		GL11.glEnable(2896);
 		GL11.glEnable(2929);
 	}
-	
-	public void drawToolTip( String text ) {
+
+	public void drawToolTip(String text) {
 		drawCreativeTabHoveringText(text, mousex, mousey);
 	}
-	
+
 	protected abstract void drawTooltips();
-	
+
 	@Override
 	public void handleMouseInput() {
 
@@ -44,13 +44,11 @@ public abstract class GuiZonus extends GuiContainer{
 
 		super.handleMouseInput();
 	}
-	
+
 	/*
 	 * @params
-	 *
-	 *
 	 */
-	public boolean isHovering( int minX, int maxX, int minY, int maxY ) {
+	public boolean isHovering(int minX, int maxX, int minY, int maxY) {
 		return (mousex > minX && mousex < maxX && mousey > minY && mousey < maxY);
 	}
 

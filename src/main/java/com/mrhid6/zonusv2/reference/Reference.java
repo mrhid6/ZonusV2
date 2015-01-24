@@ -8,5 +8,5 @@ public class Reference {
 	public static final String CLIENT_PROXY_CLASS = "com.mrhid6.zonusv2.proxy.ClientProxy";
 	public static final String SERVER_PROXY_CLASS = "com.mrhid6.zonusv2.proxy.ServerProxy";
 	public static final String GUI_FACTOR_CLASS = "com.mrhid6.zonusv2.client.gui.GuiFactory";
-	
+
 }

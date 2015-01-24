@@ -13,37 +13,40 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ContainerZoroFurnace extends ContainerZonus{
+public class ContainerZoroFurnace extends ContainerZonus {
 
 	private TileEntityZoroFurnace tileEntityZoroFurnace;
 	private int lastprocessCurrent;
 	private int lastPower;
 	private int lastprocessFinal;
 
-	public ContainerZoroFurnace(InventoryPlayer inventoryPlayer, TileEntityZoroFurnace tileEntityZoroFurnace) {
+	public ContainerZoroFurnace(InventoryPlayer inventoryPlayer,
+			TileEntityZoroFurnace tileEntityZoroFurnace) {
 
 		this.tileEntityZoroFurnace = tileEntityZoroFurnace;
 
-		addSlotToContainer(new Slot(tileEntityZoroFurnace, TileEntityZoroFurnace.INPUT_INVENTORY_INDEX, 56, 24));
-		addSlotToContainer(new Slot(tileEntityZoroFurnace, TileEntityZoroFurnace.OUTPUT_INVENTORY_INDEX, 116, 33)
-		{
+		addSlotToContainer(new Slot(tileEntityZoroFurnace,
+				TileEntityZoroFurnace.INPUT_INVENTORY_INDEX, 56, 24));
+		addSlotToContainer(new Slot(tileEntityZoroFurnace,
+				TileEntityZoroFurnace.OUTPUT_INVENTORY_INDEX, 116, 33) {
 			@Override
-			public void onPickupFromSlot(EntityPlayer entityPlayer, ItemStack itemStack)
-			{
+			public void onPickupFromSlot(EntityPlayer entityPlayer,
+					ItemStack itemStack) {
 				super.onPickupFromSlot(entityPlayer, itemStack);
-				FMLCommonHandler.instance().firePlayerCraftingEvent(entityPlayer, itemStack, inventory);
+				FMLCommonHandler.instance().firePlayerCraftingEvent(
+						entityPlayer, itemStack, inventory);
 			}
 
 			@Override
-			public boolean isItemValid(ItemStack itemStack)
-			{
+			public boolean isItemValid(ItemStack itemStack) {
 				return false;
 			}
 		});
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				addSlotToContainer(new Slot(inventoryPlayer, j + i * 9 + 9,
+						8 + j * 18, 84 + i * 18));
 			}
 		}
 
@@ -53,65 +56,64 @@ public class ContainerZoroFurnace extends ContainerZonus{
 	}
 
 	@Override
-	public void addCraftingToCrafters(ICrafting iCrafting)
-	{
+	public void addCraftingToCrafters(ICrafting iCrafting) {
 		super.addCraftingToCrafters(iCrafting);
-		iCrafting.sendProgressBarUpdate(this, 0, this.tileEntityZoroFurnace.getStoredPower());
-		iCrafting.sendProgressBarUpdate(this, 1, this.tileEntityZoroFurnace.getProcessCurrent());
-		iCrafting.sendProgressBarUpdate(this, 2, this.tileEntityZoroFurnace.getProcessFinal());
+		iCrafting.sendProgressBarUpdate(this, 0,
+				this.tileEntityZoroFurnace.getStoredPower());
+		iCrafting.sendProgressBarUpdate(this, 1,
+				this.tileEntityZoroFurnace.getProcessCurrent());
+		iCrafting.sendProgressBarUpdate(this, 2,
+				this.tileEntityZoroFurnace.getProcessFinal());
 	}
 
 	@Override
-	public void detectAndSendChanges()
-	{
+	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (Object crafter : this.crafters)
-		{
+		for (Object crafter : this.crafters) {
 			ICrafting icrafting = (ICrafting) crafter;
 
-			if (this.lastPower != this.tileEntityZoroFurnace.getStoredPower())
-			{
-				icrafting.sendProgressBarUpdate(this, 0, this.tileEntityZoroFurnace.getStoredPower());
+			if (this.lastPower != this.tileEntityZoroFurnace.getStoredPower()) {
+				icrafting.sendProgressBarUpdate(this, 0,
+						this.tileEntityZoroFurnace.getStoredPower());
 			}
 
-			if (this.lastprocessCurrent != this.tileEntityZoroFurnace.getProcessCurrent())
-			{
-				icrafting.sendProgressBarUpdate(this, 1, this.tileEntityZoroFurnace.getProcessCurrent());
+			if (this.lastprocessCurrent != this.tileEntityZoroFurnace
+					.getProcessCurrent()) {
+				icrafting.sendProgressBarUpdate(this, 1,
+						this.tileEntityZoroFurnace.getProcessCurrent());
 			}
 
-			if (this.lastprocessFinal != this.tileEntityZoroFurnace.getProcessFinal())
-			{
-				icrafting.sendProgressBarUpdate(this, 2, this.tileEntityZoroFurnace.getProcessFinal());
+			if (this.lastprocessFinal != this.tileEntityZoroFurnace
+					.getProcessFinal()) {
+				icrafting.sendProgressBarUpdate(this, 2,
+						this.tileEntityZoroFurnace.getProcessFinal());
 			}
 		}
 
 		this.lastPower = this.tileEntityZoroFurnace.getStoredPower();
-		this.lastprocessCurrent = this.tileEntityZoroFurnace.getProcessCurrent();
+		this.lastprocessCurrent = this.tileEntityZoroFurnace
+				.getProcessCurrent();
 		this.lastprocessFinal = this.tileEntityZoroFurnace.getProcessFinal();
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int valueType, int updatedValue)
-	{
-		if (valueType == 0)
-		{
+	public void updateProgressBar(int valueType, int updatedValue) {
+		if (valueType == 0) {
 			this.tileEntityZoroFurnace.setPowerStored(updatedValue);
 		}
 
-		if (valueType == 1)
-		{
+		if (valueType == 1) {
 			this.tileEntityZoroFurnace.setProcessCurrent(updatedValue);
 		}
 
-		if (valueType == 2)
-		{
+		if (valueType == 2) {
 			this.tileEntityZoroFurnace.setProcessFinal(updatedValue);
 		}
 	}
 
 	@Override
-	public ItemStack transferStackInSlot( EntityPlayer player, int i ) {
+	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
 		ItemStack itemstack = null;
 		Slot slot = (Slot) inventorySlots.get(i);
 
@@ -136,7 +138,10 @@ public class ContainerZoroFurnace extends ContainerZonus{
 					if (!mergeItemStack(stackInSlot, invPlayer, invFull, false)) {
 						return null;
 					}
-				} else if ((i >= invPlayer) && (i < invFull) && (!mergeItemStack(stackInSlot, invTile, invPlayer, false))) {
+				} else if ((i >= invPlayer)
+						&& (i < invFull)
+						&& (!mergeItemStack(stackInSlot, invTile, invPlayer,
+								false))) {
 					return null;
 				}
 			} else if (!mergeItemStack(stackInSlot, invTile, invFull, false)) {

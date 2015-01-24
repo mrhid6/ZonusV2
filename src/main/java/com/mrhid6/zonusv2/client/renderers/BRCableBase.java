@@ -28,7 +28,9 @@ public class BRCableBase implements ISimpleBlockRenderingHandler {
 		return RenderIds.CABLEBASE;
 	}
 
-	public void renderCableEnd( Block block, RenderBlocks renderer, float offset, float Thickness, int x, int y, int z, ForgeDirection orientation ) {
+	public void renderCableEnd(Block block, RenderBlocks renderer,
+			float offset, float Thickness, int x, int y, int z,
+			ForgeDirection orientation) {
 		renderer.renderAllFaces = true;
 		float offX = orientation.offsetX / 2.0F;
 		float offY = orientation.offsetY / 2.0F;
@@ -42,11 +44,16 @@ public class BRCableBase implements ISimpleBlockRenderingHandler {
 		centerY += orientation.offsetY * -offset;
 		centerZ += orientation.offsetZ * -offset;
 
-		float thickX = Math.abs(orientation.offsetX) > 0.1D ? 0.076F : Thickness / 2;
-		float thickY = Math.abs(orientation.offsetY) > 0.1D ? 0.076F : Thickness / 2;
-		float thickZ = Math.abs(orientation.offsetZ) > 0.1D ? 0.076F : Thickness / 2;
+		float thickX = Math.abs(orientation.offsetX) > 0.1D ? 0.076F
+				: Thickness / 2;
+		float thickY = Math.abs(orientation.offsetY) > 0.1D ? 0.076F
+				: Thickness / 2;
+		float thickZ = Math.abs(orientation.offsetZ) > 0.1D ? 0.076F
+				: Thickness / 2;
 
-		renderer.setRenderBounds(centerX + offX - thickX, centerY + offY - thickY, centerZ + offZ - thickZ, centerX + offX + thickX, centerY + offY + thickY, centerZ + offZ + thickZ);
+		renderer.setRenderBounds(centerX + offX - thickX, centerY + offY
+				- thickY, centerZ + offZ - thickZ, centerX + offX + thickX,
+				centerY + offY + thickY, centerZ + offZ + thickZ);
 
 		Block tex = ModBlocks.machineBlock;
 
@@ -64,7 +71,8 @@ public class BRCableBase implements ISimpleBlockRenderingHandler {
 	}
 
 	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
+			Block block, int modelId, RenderBlocks renderer) {
 
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
 		if (!(tileEntity instanceof TileEntityCableBase)) {
@@ -72,11 +80,10 @@ public class BRCableBase implements ISimpleBlockRenderingHandler {
 			return true;
 		}
 
-		TileEntityCableBase cable = (TileEntityCableBase)tileEntity;
+		TileEntityCableBase cable = (TileEntityCableBase) tileEntity;
 
 		float th = (float) cable.getCableThickness();
 		float sp = (1.0F - th) / 2.0F;
-
 
 		boolean[] connections = cable.getConnections();
 
@@ -84,11 +91,11 @@ public class BRCableBase implements ISimpleBlockRenderingHandler {
 
 		IIcon lightTexture = null;
 
-		if(block instanceof BlockCableBase){
+		if (block instanceof BlockCableBase) {
 			lightTexture = BlockLightTextures.CableBaseLights.getIcons()[0];
 		}
-		
-		if(block instanceof BlockZoroCable){
+
+		if (block instanceof BlockZoroCable) {
 			lightTexture = BlockLightTextures.ZoroCableLights.getIcons()[0];
 		}
 
@@ -96,13 +103,12 @@ public class BRCableBase implements ISimpleBlockRenderingHandler {
 		double yD = y;
 		double zD = z;
 
-
 		int mask = 1;
 		int connectivity = 0;
 		int renderSide = 0;
 
-		int[] invertedsides = new int[]{5,4,1,0,3,2};
-		int[] sides = new int[]{4,5,0,1,2,3};
+		int[] invertedsides = new int[] { 5, 4, 1, 0, 3, 2 };
+		int[] sides = new int[] { 4, 5, 0, 1, 2, 3 };
 		for (int i = 0; i < 6; i++) {
 
 			TileEntity neighbor = null;
@@ -111,15 +117,17 @@ public class BRCableBase implements ISimpleBlockRenderingHandler {
 			int yoffset = ForgeDirection.getOrientation(sides[i]).offsetY;
 			int zoffset = ForgeDirection.getOrientation(sides[i]).offsetZ;
 
-
-
-			if ((cable.getWorldObj() != null) && (cable.getWorldObj().blockExists(x + xoffset, y + yoffset, z + zoffset))) {
-				neighbor = cable.getWorldObj().getTileEntity(x + xoffset, y + yoffset, z + zoffset);
+			if ((cable.getWorldObj() != null)
+					&& (cable.getWorldObj().blockExists(x + xoffset, y
+							+ yoffset, z + zoffset))) {
+				neighbor = cable.getWorldObj().getTileEntity(x + xoffset,
+						y + yoffset, z + zoffset);
 			}
 
 			if ((neighbor != null)) {
 
-				if (cable.canIConnectWithTileEntity(neighbor, ForgeDirection.getOrientation(sides[i]).getOpposite())) {
+				if (cable.canIConnectWithTileEntity(neighbor, ForgeDirection
+						.getOrientation(sides[i]).getOpposite())) {
 					connectivity |= mask;
 					renderSide |= mask;
 				}
@@ -136,28 +144,36 @@ public class BRCableBase implements ISimpleBlockRenderingHandler {
 
 			TileEntity te1 = world.getTileEntity(x1, y1, z1);
 
-			if (cable.canIConnectWithTileEntity(te1, ForgeDirection.getOrientation(sides[i]).getOpposite())) {
-				if (te1 instanceof IMachineConnectable || te1 instanceof IMachineSidedConnectable) {
-					renderCableEnd(block, renderer, 0.076F, th + 0.125F, x, y, z, ForgeDirection.getOrientation(sides[i]));
+			if (cable.canIConnectWithTileEntity(te1, ForgeDirection
+					.getOrientation(sides[i]).getOpposite())) {
+				if (te1 instanceof IMachineConnectable
+						|| te1 instanceof IMachineSidedConnectable) {
+					renderCableEnd(block, renderer, 0.076F, th + 0.125F, x, y,
+							z, ForgeDirection.getOrientation(sides[i]));
 				}
 			}
 
 		}
 
-		renderCable(renderer, block, connectivity, renderSide, sp, th, texture, x, y, z, world, true);
-		renderCable(renderer, block, connectivity, renderSide, sp, th, lightTexture, x, y, z, world, false);
+		renderCable(renderer, block, connectivity, renderSide, sp, th, texture,
+				x, y, z, world, true);
+		renderCable(renderer, block, connectivity, renderSide, sp, th,
+				lightTexture, x, y, z, world, false);
 		return true;
 	}
 
-	public void renderCable(RenderBlocks renderer, Block block, int connectivity, int renderSide, float sp, float th, IIcon texture, int x, int y, int z, IBlockAccess world, boolean useLighting){
+	public void renderCable(RenderBlocks renderer, Block block,
+			int connectivity, int renderSide, float sp, float th,
+			IIcon texture, int x, int y, int z, IBlockAccess world,
+			boolean useLighting) {
 		Tessellator tessellator = Tessellator.instance;
 
-		if(useLighting)
-			tessellator.setBrightness(block.getMixedBrightnessForBlock(world, x, y, z));
-		else{
-			tessellator.setBrightness( 14 << 20 | 14 << 4 );
+		if (useLighting)
+			tessellator.setBrightness(block.getMixedBrightnessForBlock(world,
+					x, y, z));
+		else {
+			tessellator.setBrightness(14 << 20 | 14 << 4);
 		}
-
 
 		double xD = x;
 		double yD = y;
@@ -177,8 +193,7 @@ public class BRCableBase implements ISimpleBlockRenderingHandler {
 			tessellator.setColorOpaque_F(0.6F, 0.6F, 0.6F);
 			renderer.renderFaceXNeg(block, xD, yD, zD, texture);
 			renderer.renderFaceXPos(block, xD, yD, zD, texture);
-		}
-		else if (connectivity == 3) {
+		} else if (connectivity == 3) {
 			block.setBlockBounds(0.0F, sp, sp, 1.0F, sp + th, sp + th);
 			renderer.setRenderBoundsFromBlock(block);
 
@@ -240,8 +255,7 @@ public class BRCableBase implements ISimpleBlockRenderingHandler {
 				tessellator.setColorOpaque_F(0.8F, 0.8F, 0.8F);
 				renderer.renderFaceZPos(block, xD, yD, zD, texture);
 			}
-		}
-		else {
+		} else {
 			if ((connectivity & 0x1) == 0) {
 				block.setBlockBounds(sp, sp, sp, sp + th, sp + th, sp + th);
 				renderer.setRenderBoundsFromBlock(block);

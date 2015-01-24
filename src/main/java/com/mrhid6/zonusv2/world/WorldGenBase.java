@@ -12,10 +12,11 @@ import com.mrhid6.zonusv2.reference.Materials;
 
 import cpw.mods.fml.common.IWorldGenerator;
 
-public class WorldGenBase implements IWorldGenerator{
+public class WorldGenBase implements IWorldGenerator {
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+	public void generate(Random random, int chunkX, int chunkZ, World world,
+			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
 		if (world.isRemote) {
 			return;
 		}
@@ -40,7 +41,10 @@ public class WorldGenBase implements IWorldGenerator{
 			int firstBlockXCoord = chunkX + rand.nextInt(16);
 			int firstBlockYCoord = rand.nextInt(64);
 			int firstBlockZCoord = chunkZ + rand.nextInt(16);
-			(new WorldGenMinable(ModBlocks.zonusOres, Materials.ZoroOre.getItemDamage(), 6, Blocks.stone)).generate(world, rand, firstBlockXCoord, firstBlockYCoord, firstBlockZCoord);
+			(new WorldGenMinable(ModBlocks.zonusOres,
+					Materials.ZoroOre.getItemDamage(), 6, Blocks.stone))
+					.generate(world, rand, firstBlockXCoord, firstBlockYCoord,
+							firstBlockZCoord);
 		}
 	}
 

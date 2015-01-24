@@ -8,21 +8,25 @@ import net.minecraft.world.World;
 
 import com.mrhid6.zonusv2.init.ModBlocks;
 
-public class ItemCableBase extends ItemZonus{
-	
-	
+public class ItemCableBase extends ItemZonus {
+
 	public ItemCableBase() {
 		super();
 		this.setUnlocalizedName("cablebase");
 	}
-	
+
 	@Override
-	public boolean onItemUse( ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int par7, float par8, float par9, float par10 ) {
-		return placeCable(itemStack, player, world, x, y, z, par7, ModBlocks.cableBase);
+	public boolean onItemUse(ItemStack itemStack, EntityPlayer player,
+			World world, int x, int y, int z, int par7, float par8, float par9,
+			float par10) {
+		return placeCable(itemStack, player, world, x, y, z, par7,
+				ModBlocks.cableBase);
 	}
-	
-	protected boolean placeCable(ItemStack itemStack, EntityPlayer player, World world, int x, int y, int z, int par7, Block cableBlock){
-		if (world.getBlock(x, y, z) != Blocks.snow && world.getBlock(x, y, z) != Blocks.snow_layer) {
+
+	protected boolean placeCable(ItemStack itemStack, EntityPlayer player,
+			World world, int x, int y, int z, int par7, Block cableBlock) {
+		if (world.getBlock(x, y, z) != Blocks.snow
+				&& world.getBlock(x, y, z) != Blocks.snow_layer) {
 			if (par7 == 0) {
 				--y;
 			}

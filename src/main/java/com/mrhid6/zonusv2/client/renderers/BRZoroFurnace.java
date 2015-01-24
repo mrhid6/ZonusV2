@@ -11,7 +11,7 @@ import com.mrhid6.zonusv2.client.textures.BlockLightTextures;
 import com.mrhid6.zonusv2.reference.RenderIds;
 import com.mrhid6.zonusv2.tileentity.TileEntityZoroFurnace;
 
-public class BRZoroFurnace extends BRZonus{
+public class BRZoroFurnace extends BRZonus {
 
 	@Override
 	public int getRenderId() {
@@ -19,21 +19,25 @@ public class BRZoroFurnace extends BRZonus{
 	}
 
 	@Override
-	public boolean renderWorldBlock( IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer ) {
-		
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
+			Block block, int modelId, RenderBlocks renderer) {
+
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
-		
-		if(tileEntity == null || !(tileEntity instanceof TileEntityZoroFurnace)) return false;
-		
-		TileEntityZoroFurnace tileEntityZoroFurnace = (TileEntityZoroFurnace)tileEntity;
-		
+
+		if (tileEntity == null
+				|| !(tileEntity instanceof TileEntityZoroFurnace))
+			return false;
+
+		TileEntityZoroFurnace tileEntityZoroFurnace = (TileEntityZoroFurnace) tileEntity;
+
 		ForgeDirection orientation = tileEntityZoroFurnace.getOrientation();
-		
+
 		renderer.renderStandardBlock(block, x, y, z);
-		
-		if(tileEntityZoroFurnace.getState() == 1){
+
+		if (tileEntityZoroFurnace.getState() == 1) {
 			BlockLightTextures light = BlockLightTextures.ZoroFurnaceLights;
-			render3SidedLights(renderer, block, world, x, y, z, orientation, light);
+			render3SidedLights(renderer, block, world, x, y, z, orientation,
+					light);
 		}
 		return true;
 	}

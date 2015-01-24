@@ -19,8 +19,8 @@ import com.mrhid6.zonusv2.utility.LogHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class BlockZonus extends Block{
-	
+public class BlockZonus extends Block {
+
 	public BlockZonus(Material material) {
 		super(material);
 
@@ -28,64 +28,60 @@ public class BlockZonus extends Block{
 		this.setResistance(89.5F);
 		this.setCreativeTab(CreativeTabZonus.ZONUS_TAB);
 	}
-	
-	
-	public BlockZonus(){
+
+	public BlockZonus() {
 		this(Material.rock);
 	}
-	
+
 	@Override
 	public String getUnlocalizedName() {
-		return String.format("tile.%s%s", Reference.MOD_ID.toLowerCase() + ":", getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
+		return String.format("tile.%s%s", Reference.MOD_ID.toLowerCase() + ":",
+				getUnwrappedUnlocalizedName(super.getUnlocalizedName()));
 	}
-	
-	public String getUnwrappedUnlocalizedName(String unlocalizedName){
-		return unlocalizedName.substring(unlocalizedName.indexOf(".")+1);
+
+	public String getUnwrappedUnlocalizedName(String unlocalizedName) {
+		return unlocalizedName.substring(unlocalizedName.indexOf(".") + 1);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		blockIcon = iconRegister.registerIcon(getTextureName());
 	}
-	
-	protected String getTextureName(){
-		return this.getUnlocalizedName().substring(this.getUnlocalizedName().indexOf(".") + 1);
+
+	protected String getTextureName() {
+		return this.getUnlocalizedName().substring(
+				this.getUnlocalizedName().indexOf(".") + 1);
 	}
-	
+
+	// Determine which way the front will be for a machine.
 	@Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLiving, ItemStack itemStack)
-    {
-		
-        if (world.getTileEntity(x, y, z) instanceof TileEntityZonus)
-        {
-            int direction = 0;
-            int facing = MathHelper.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+	public void onBlockPlacedBy(World world, int x, int y, int z,
+			EntityLivingBase entityLiving, ItemStack itemStack) {
 
-            if (facing == 0)
-            {
-                direction = ForgeDirection.NORTH.ordinal();
-            }
-            else if (facing == 1)
-            {
-                direction = ForgeDirection.EAST.ordinal();
-            }
-            else if (facing == 2)
-            {
-                direction = ForgeDirection.SOUTH.ordinal();
-            }
-            else if (facing == 3)
-            {
-                direction = ForgeDirection.WEST.ordinal();
-            }
+		if (world.getTileEntity(x, y, z) instanceof TileEntityZonus) {
+			int direction = 0;
+			int facing = MathHelper
+					.floor_double(entityLiving.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
-            if (itemStack.hasDisplayName())
-            {
-                ((TileEntityZonus) world.getTileEntity(x, y, z)).setCustomName(itemStack.getDisplayName());
-            }
+			if (facing == 0) {
+				direction = ForgeDirection.NORTH.ordinal();
+			} else if (facing == 1) {
+				direction = ForgeDirection.EAST.ordinal();
+			} else if (facing == 2) {
+				direction = ForgeDirection.SOUTH.ordinal();
+			} else if (facing == 3) {
+				direction = ForgeDirection.WEST.ordinal();
+			}
 
-            ((TileEntityZonus) world.getTileEntity(x, y, z)).setOrientation(direction);
-        }
-    }
-	
+			if (itemStack.hasDisplayName()) {
+				((TileEntityZonus) world.getTileEntity(x, y, z))
+						.setCustomName(itemStack.getDisplayName());
+			}
+
+			((TileEntityZonus) world.getTileEntity(x, y, z))
+					.setOrientation(direction);
+		}
+	}
+
 }

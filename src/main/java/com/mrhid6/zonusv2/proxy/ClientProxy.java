@@ -16,36 +16,39 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-public class ClientProxy extends CommonProxy{
-	
-	public void init(){
-		MinecraftForge.EVENT_BUS.register( this );
+public class ClientProxy extends CommonProxy {
+
+	public void init() {
+		MinecraftForge.EVENT_BUS.register(this);
 	}
-	
+
 	@Override
 	public void initRenderingAndTextures() {
 		RenderIds.ZOROFURNACE = RenderingRegistry.getNextAvailableRenderId();
 		RenderIds.CABLEBASE = RenderingRegistry.getNextAvailableRenderId();
 		RenderIds.ZONUSORES = RenderingRegistry.getNextAvailableRenderId();
-		RenderIds.TRINIUMGENERATOR = RenderingRegistry.getNextAvailableRenderId();
-		
-		
-		RenderingRegistry.registerBlockHandler(RenderIds.ZOROFURNACE, new BRZoroFurnace());
-		RenderingRegistry.registerBlockHandler(RenderIds.CABLEBASE, new BRCableBase());
-		RenderingRegistry.registerBlockHandler(RenderIds.ZONUSORES, new BRZonusOres());
-		RenderingRegistry.registerBlockHandler(RenderIds.TRINIUMGENERATOR, new BRTriniumGenerator());
-		
-		//ClientRegistry.bindTileEntitySpecialRenderer(TileEntityZoroFurnace.class, new RenderZoroFurnace());
-	}
-	
-	@SubscribeEvent
-	public void updateTextureSheet(TextureStitchEvent.Pre ev)
-	{
+		RenderIds.TRINIUMGENERATOR = RenderingRegistry
+				.getNextAvailableRenderId();
 
-		if ( ev.map.getTextureType() == 0 )
-		{
+		RenderingRegistry.registerBlockHandler(RenderIds.ZOROFURNACE,
+				new BRZoroFurnace());
+		RenderingRegistry.registerBlockHandler(RenderIds.CABLEBASE,
+				new BRCableBase());
+		RenderingRegistry.registerBlockHandler(RenderIds.ZONUSORES,
+				new BRZonusOres());
+		RenderingRegistry.registerBlockHandler(RenderIds.TRINIUMGENERATOR,
+				new BRTriniumGenerator());
+
+		// ClientRegistry.bindTileEntitySpecialRenderer(TileEntityZoroFurnace.class,
+		// new RenderZoroFurnace());
+	}
+
+	@SubscribeEvent
+	public void updateTextureSheet(TextureStitchEvent.Pre ev) {
+
+		if (ev.map.getTextureType() == 0) {
 			for (BlockLightTextures et : BlockLightTextures.values())
-				et.registerIcon( ev.map );
+				et.registerIcon(ev.map);
 		}
 	}
 
